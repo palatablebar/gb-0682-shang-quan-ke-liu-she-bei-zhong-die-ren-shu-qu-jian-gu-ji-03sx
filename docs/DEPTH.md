@@ -31,6 +31,7 @@
 | TRAP-26 | 旧版本复核 | 覆盖新结论 | 事务条件更新 | `app/store.py` | `tests/test_archive.py::test_stale_review` |
 | TRAP-11 | 时区混用 | 同刻不同桶 | UTC归整 | `app/modules/m2_mapping/coerce.py` | `tests/test_versions.py::test_same_instant` |
 | TRAP-19 | 三方约束矛盾 | 输出伪精确数 | 非负原子区域可行检查 | `app/modules/m5_calculate/rules.py` | `tests/test_calculate.py::test_three_way_contradiction` |
+| TRAP-27 | 设备时钟漂移 | 同刻拆进相邻小时、联合区间抖动 | 校准时刻为正式口径、原始时刻只读留痕、证据失败整批回退且不新增归档 | `app/modules/m2_mapping/calibration.py` | `tests/test_calibration.py` |
 
 ## 对账规则
 

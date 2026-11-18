@@ -2,6 +2,7 @@ from copy import deepcopy
 from app.config import REQUIRED,NUMERIC,DATES,TIMES
 from app.errors import DomainError
 from app.modules.m2_mapping.coerce import number,day,instant,SENTINELS
+from app.modules.m2_mapping.calibration import apply_clock_calibration
 
 def normalize(state):
     state=deepcopy(state);good=[];groups={}
@@ -26,4 +27,4 @@ def normalize(state):
         else:
             good.append(rows[0]);state['duplicate_count']+=len(rows)-1
     state['rows']=good
-    return state
+    return apply_clock_calibration(state,state.get('parameters'))

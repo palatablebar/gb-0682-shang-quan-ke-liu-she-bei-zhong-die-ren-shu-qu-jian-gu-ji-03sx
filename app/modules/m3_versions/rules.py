@@ -6,7 +6,9 @@ ALIASES={'东门':'A','中庭':'B','西门':'C','A':'A','B':'B','C':'C'}
 def apply(state):
     groups=defaultdict(list);bad=[]
     for r in state['rows']:
-        r['bucket']=datetime.fromisoformat(r['bucket']).replace(minute=0,second=0,microsecond=0).isoformat()
+        # 正式口径：校准后的真实时刻决定小时桶；原始采集时刻只作留痕。
+        time_source=r.get('bucket_calibrated') or r['bucket']
+        r['bucket']=datetime.fromisoformat(time_source).replace(minute=0,second=0,microsecond=0).isoformat()
         r['left']=ALIASES.get(r['left'],r['left']);r['right']=ALIASES.get(r['right'],r['right'])
         value=Decimal(str(r['count']))
         factor={'人':Decimal(1),'千人':Decimal(1000)}.get(r['unit'])

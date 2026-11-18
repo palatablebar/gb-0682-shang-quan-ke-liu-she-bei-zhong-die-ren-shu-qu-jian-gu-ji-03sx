@@ -11,6 +11,9 @@ def connection():
     return db
 
 def save(run_id, body):
+    # 校准切换失败的批次不得写入归档，旧版归档原样保留。
+    if body.get('clock_calibration',{}).get('status')=='rejected':
+        raise DomainError('CLOCK','校准证据无效，已回退原始时刻，未生成新归档',422)
     with connection() as db:
         db.execute('INSERT OR IGNORE INTO runs(id,body) VALUES (?,?)',(run_id,json.dumps(body,ensure_ascii=False)))
         db.execute("INSERT INTO meta(key,value) VALUES ('latest',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",(run_id,))

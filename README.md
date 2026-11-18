@@ -31,7 +31,11 @@ docker compose exec -T app pytest -q
 docker compose config --quiet
 ```
 
-原始样例在 `sample_data/`。测试在 `tests/`。封存文件是单份CSV，含运行清单、计算证据、隔离原因与对账。复核需提交当前版本，陈旧复核返回409。
+原始样例在 `sample_data/`。测试在 `tests/`。封存文件是单份CSV，含运行清单、时钟校准证据、计算证据、隔离原因与对账。复核需提交当前版本，陈旧复核返回409。
+
+## 时钟口径
+
+校准后的真实时刻是分桶与交集的正式口径，原始采集时刻保留留痕。校准证据经运行参数 `clock_rules`（device_id / offset_minutes / evidence_id）提交；证据无效整批回退原始时刻且不写入归档，同批校准重跑复用同一 run_id 不新增归档版本。`drift.csv` 演示慢13分钟把同刻观测拆进相邻小时的场景。详见 `docs/DATA-DICTIONARY.md`。
 
 ## 数据与限制
 
